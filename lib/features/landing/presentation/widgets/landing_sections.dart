@@ -134,56 +134,99 @@ class _HeroSectionState extends ConsumerState<HeroSection> {
                 ),
               ),
               const SizedBox(height: 12),
-              Form(
-                key: _formKey,
-                child: TextFormField(
-                  controller: _emailController,
-                  focusNode: _emailFocusNode,
-                  keyboardType: TextInputType.emailAddress,
-                  textInputAction: TextInputAction.done,
-                  style: const TextStyle(color: Colors.white),
-                  validator: formController.validateEmail,
-                  decoration: const InputDecoration(
-                    hintText: 'Correo electronico',
-                    hintStyle: TextStyle(color: Color(0xFF97A5C5), fontSize: 13),
-                  ),
-                  onChanged: formController.updateEmail,
-                  onFieldSubmitted: (_) async {
-                    await _submitForm(formController);
-                  },
-                ),
-              ),
-              const SizedBox(height: 10),
-              SizedBox(
+              // Responsive subscription form: horizontal on wide, stacked on mobile
+              Container(
                 width: double.infinity,
-                height: 45,
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF00C7EF),
-                    foregroundColor: const Color(0xFF001426),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(6),
-                    ),
-                  ),
-                  onPressed: formState.isSubmitting
-                      ? null
-                      : () async {
-                          await _submitForm(formController);
-                        },
-                  child: formState.isSubmitting
-                      ? const SizedBox(
-                          width: 18,
-                          height: 18,
-                          child: CircularProgressIndicator(strokeWidth: 2),
-                        )
-                      : const Text(
-                          'SUSCRIBIRME AHORA',
-                          style: TextStyle(
-                            fontSize: 12,
-                            letterSpacing: 0.5,
-                            fontWeight: FontWeight.w800,
+                padding: const EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  color: Colors.black45,
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Form(
+                  key: _formKey,
+                  child: LayoutBuilder(builder: (context, constraints) {
+                    final isCompact = constraints.maxWidth < 420;
+                    if (isCompact) {
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          TextFormField(
+                            controller: _emailController,
+                            focusNode: _emailFocusNode,
+                            keyboardType: TextInputType.emailAddress,
+                            textInputAction: TextInputAction.done,
+                            style: const TextStyle(color: Colors.white),
+                            validator: formController.validateEmail,
+                            decoration: const InputDecoration(
+                              hintText: 'Correo electrónico',
+                              hintStyle: TextStyle(color: Color(0xFF97A5C5), fontSize: 14),
+                              contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+                              border: OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(8)), borderSide: BorderSide.none),
+                              filled: true,
+                              fillColor: Color(0x11000000),
+                            ),
+                            onChanged: formController.updateEmail,
+                            onFieldSubmitted: (_) async => await _submitForm(formController),
+                          ),
+                          const SizedBox(height: 8),
+                          SizedBox(
+                            height: 44,
+                            child: ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: const Color(0xFF00C7EF),
+                                foregroundColor: const Color(0xFF001426),
+                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                              ),
+                              onPressed: formState.isSubmitting ? null : () async => await _submitForm(formController),
+                              child: formState.isSubmitting
+                                  ? const SizedBox(width: 18, height: 18, child: CircularProgressIndicator(strokeWidth: 2))
+                                  : const Text('SUSCRIBIRME AHORA', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w800)),
+                            ),
+                          ),
+                        ],
+                      );
+                    }
+
+                    return Row(
+                      children: [
+                        Expanded(
+                          child: TextFormField(
+                            controller: _emailController,
+                            focusNode: _emailFocusNode,
+                            keyboardType: TextInputType.emailAddress,
+                            textInputAction: TextInputAction.done,
+                            style: const TextStyle(color: Colors.white),
+                            validator: formController.validateEmail,
+                            decoration: const InputDecoration(
+                              hintText: 'Correo electrónico',
+                              hintStyle: TextStyle(color: Color(0xFF97A5C5), fontSize: 14),
+                              contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+                              border: OutlineInputBorder(borderRadius: BorderRadius.only(topLeft: Radius.circular(8), bottomLeft: Radius.circular(8)), borderSide: BorderSide.none),
+                              filled: true,
+                              fillColor: Color(0x11000000),
+                            ),
+                            onChanged: formController.updateEmail,
+                            onFieldSubmitted: (_) async => await _submitForm(formController),
                           ),
                         ),
+                        const SizedBox(width: 8),
+                        SizedBox(
+                          height: 44,
+                          child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: const Color(0xFF00C7EF),
+                              foregroundColor: const Color(0xFF001426),
+                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                            ),
+                            onPressed: formState.isSubmitting ? null : () async => await _submitForm(formController),
+                            child: formState.isSubmitting
+                                ? const SizedBox(width: 18, height: 18, child: CircularProgressIndicator(strokeWidth: 2))
+                                : const Padding(padding: EdgeInsets.symmetric(horizontal: 8), child: Text('SUSCRIBIRME AHORA', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w800))),
+                          ),
+                        ),
+                      ],
+                    );
+                  }),
                 ),
               ),
               if (formState.errorMessage != null) ...[
@@ -454,13 +497,15 @@ class SectionTitle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final width = MediaQuery.of(context).size.width;
+    final fontSize = width < 380 ? 24.0 : (width < 480 ? 30.0 : 38.0);
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
       child: Text(
         title,
-        style: const TextStyle(
+        style: TextStyle(
           color: Colors.white,
-          fontSize: 38,
+          fontSize: fontSize,
           fontWeight: FontWeight.w700,
           height: 0.95,
         ),
