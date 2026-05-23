@@ -43,7 +43,7 @@ class _HeroSectionState extends ConsumerState<HeroSection> {
     final formState = ref.watch(subscriptionFormControllerProvider);
     final formController = ref.read(subscriptionFormControllerProvider.notifier);
 
-    final heroImage = AppAssets.heroImages.first;
+    final heroImage = AppAssets.localHeroImages.first;
 
     final horizontalPadding = widget.isWide ? 24.0 : 12.0;
 
@@ -415,7 +415,7 @@ class MiniThumbRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const images = AppAssets.heroImages;
+    const images = AppAssets.localHeroImages;
 
     return SizedBox(
       height: 46,
@@ -877,7 +877,7 @@ class DevicesSection extends StatelessWidget {
             ClipRRect(
               borderRadius: BorderRadius.circular(8),
               child: Image.asset(
-                AppAssets.heroImages[1],
+                AppAssets.localHeroImages[1],
                 height: 160,
                 width: double.infinity,
                 fit: BoxFit.cover,
