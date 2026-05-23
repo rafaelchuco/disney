@@ -5,15 +5,15 @@ class AppTheme {
 
   static ThemeData get darkTheme {
     const colorScheme = ColorScheme.dark(
-      primary: Color(0xFF00D4FF),
-      secondary: Color(0xFF12B8CA),
-      surface: Color(0xFF081126),
+      primary: Color(0xFF02D6E8),
+      secondary: Color(0xFF02D6E8),
+      surface: Color(0xFF040714),
     );
 
     return ThemeData(
       useMaterial3: true,
       brightness: Brightness.dark,
-      scaffoldBackgroundColor: const Color(0xFF020814),
+      scaffoldBackgroundColor: const Color(0xFF040714),
       colorScheme: colorScheme,
       textTheme: const TextTheme(
         bodyMedium: TextStyle(
@@ -24,18 +24,18 @@ class AppTheme {
       ),
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
-        fillColor: const Color(0xFF192236),
+        fillColor: const Color(0xFF2C2E35),
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(6),
-          borderSide: const BorderSide(color: Colors.white24),
+          borderRadius: BorderRadius.circular(8),
+          borderSide: BorderSide.none,
         ),
         enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(6),
-          borderSide: const BorderSide(color: Colors.white24),
+          borderRadius: BorderRadius.circular(8),
+          borderSide: BorderSide.none,
         ),
         focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(6),
-          borderSide: const BorderSide(color: Color(0xFF00C7EF)),
+          borderRadius: BorderRadius.circular(8),
+          borderSide: const BorderSide(color: Color(0xFF02D6E8)),
         ),
       ),
     );

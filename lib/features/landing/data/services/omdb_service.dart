@@ -1,16 +1,16 @@
 import 'dart:convert';
 
 import 'package:disney/core/network/api_exception.dart';
+import 'package:dio/dio.dart';
 import 'package:disney/features/landing/data/models/omdb_movie.dart';
-import 'package:http/http.dart' as http;
 
 class OmdbService {
-  OmdbService({http.Client? client}) : _client = client ?? http.Client();
+  OmdbService({Dio? client}) : _client = client ?? Dio();
 
   static const _apiKey = '18bc7fa3';
   static const _baseUrl = 'www.omdbapi.com';
 
-  final http.Client _client;
+  final Dio _client;
 
   Future<List<OmdbMovie>> fetchCatalog() async {
     const queries = [
@@ -25,22 +25,25 @@ class OmdbService {
     final movies = <OmdbMovie>[];
 
     for (final query in queries) {
-      final uri = Uri.https(
-        _baseUrl,
-        '/',
-        <String, String>{
-          'apikey': _apiKey,
-          's': query,
-          'type': 'movie',
-        },
-      );
-
-      final response = await _client.get(uri);
-      if (response.statusCode != 200) {
+      Response<String> response;
+      try {
+        response = await _client.get<String>(
+          'https://$_baseUrl/',
+          queryParameters: <String, String>{
+            'apikey': _apiKey,
+            's': query,
+            'type': 'movie',
+          },
+        );
+      } on DioException {
         continue;
       }
 
-      final body = jsonDecode(response.body) as Map<String, dynamic>;
+      if (response.statusCode != 200 || response.data == null) {
+        continue;
+      }
+
+      final body = jsonDecode(response.data!) as Map<String, dynamic>;
       final results = body['Search'];
       if (results is! List<dynamic>) {
         continue;

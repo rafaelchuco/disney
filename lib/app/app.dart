@@ -1,5 +1,5 @@
+import 'package:disney/app/router/app_router.dart';
 import 'package:disney/app/theme/app_theme.dart';
-import 'package:disney/features/landing/presentation/screens/landing_screen.dart';
 import 'package:flutter/material.dart';
 
 class DisneyApp extends StatelessWidget {
@@ -7,11 +7,11 @@ class DisneyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return MaterialApp.router(
       debugShowCheckedModeBanner: false,
       title: 'Disney+',
       theme: AppTheme.darkTheme,
-      home: const LandingScreen(),
+      routerConfig: AppRouter.router,
     );
   }
 }
