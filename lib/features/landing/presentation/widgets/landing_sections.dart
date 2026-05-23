@@ -1,3 +1,4 @@
+import 'package:disney/core/constants/app_assets.dart';
 import 'package:disney/features/landing/data/models/omdb_movie.dart';
 import 'package:disney/features/landing/presentation/controllers/subscription_form_controller.dart';
 import 'package:disney/features/landing/presentation/providers/catalog_providers.dart';
@@ -42,9 +43,7 @@ class _HeroSectionState extends ConsumerState<HeroSection> {
     final formState = ref.watch(subscriptionFormControllerProvider);
     final formController = ref.read(subscriptionFormControllerProvider.notifier);
 
-    final heroImage = widget.movies.isNotEmpty
-        ? widget.movies.first.poster
-        : 'https://images.unsplash.com/photo-1536440136628-849c177e76a1?auto=format&fit=crop&w=1200&q=80';
+    final heroImage = AppAssets.heroImages.first;
 
     final horizontalPadding = widget.isWide ? 24.0 : 12.0;
 
@@ -53,7 +52,7 @@ class _HeroSectionState extends ConsumerState<HeroSection> {
         SizedBox(
           width: double.infinity,
           height: widget.isWide ? 620 : 520,
-          child: Image.network(
+          child: Image.asset(
             heroImage,
             fit: BoxFit.cover,
             errorBuilder: (context, error, stackTrace) {
@@ -257,26 +256,33 @@ class DisneyLogo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Row(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Text(
-          'Disney',
-          style: TextStyle(
-            fontSize: 30,
-            color: Colors.white,
-            fontWeight: FontWeight.w500,
-          ),
-        ),
-        Text(
-          '+',
-          style: TextStyle(
-            color: Color(0xFF00C7EF),
-            fontSize: 33,
-            fontWeight: FontWeight.w600,
-          ),
-        ),
-      ],
+    return Image.asset(
+      AppAssets.disneyLogo,
+      height: 34,
+      fit: BoxFit.contain,
+      errorBuilder: (context, error, stackTrace) {
+        return const Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              'Disney',
+              style: TextStyle(
+                fontSize: 30,
+                color: Colors.white,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+            Text(
+              '+',
+              style: TextStyle(
+                color: Color(0xFF00C7EF),
+                fontSize: 33,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ],
+        );
+      },
     );
   }
 }
@@ -409,25 +415,20 @@ class MiniThumbRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const urls = [
-      'https://images.unsplash.com/photo-1560272564-c83b66b1ad12?auto=format&fit=crop&w=320&q=80',
-      'https://images.unsplash.com/photo-1574629810360-7efbbe195018?auto=format&fit=crop&w=320&q=80',
-      'https://images.unsplash.com/photo-1546519638-68e109498ffc?auto=format&fit=crop&w=320&q=80',
-      'https://images.unsplash.com/photo-1517649763962-0c623066013b?auto=format&fit=crop&w=320&q=80',
-    ];
+    const images = AppAssets.heroImages;
 
     return SizedBox(
       height: 46,
       child: ListView.separated(
         padding: const EdgeInsets.symmetric(horizontal: 12),
         scrollDirection: Axis.horizontal,
-        itemCount: urls.length,
+        itemCount: images.length,
         separatorBuilder: (context, index) => const SizedBox(width: 6),
         itemBuilder: (context, index) {
           return ClipRRect(
             borderRadius: BorderRadius.circular(4),
-            child: Image.network(
-              urls[index],
+            child: Image.asset(
+              images[index],
               width: 74,
               fit: BoxFit.cover,
               errorBuilder: (context, error, stackTrace) {
@@ -875,8 +876,8 @@ class DevicesSection extends StatelessWidget {
             const SizedBox(height: 14),
             ClipRRect(
               borderRadius: BorderRadius.circular(8),
-              child: Image.network(
-                'https://images.unsplash.com/photo-1593341646782-e0b495cff86d?auto=format&fit=crop&w=900&q=80',
+              child: Image.asset(
+                AppAssets.heroImages[1],
                 height: 160,
                 width: double.infinity,
                 fit: BoxFit.cover,
